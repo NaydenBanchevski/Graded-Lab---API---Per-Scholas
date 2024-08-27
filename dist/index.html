@@ -17,18 +17,16 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <!-- Our Scripts -->
-    <script type="text/javascript" src="/Carousel.65c09124.js"></script>
-    <script type="text/javascript" src="/Graded Lab cat Project.e31bb0bc.js"></script>
+    <script type="module" src="/Graded Lab cat Project.e31bb0bc.js"></script>
   <script src="/styles.8986bff4.js"></script></head>
 
   <body>
     <!-- Progress Bar-->
-    <div id="progressBar" class="progress-bar-top" style="transition: width 1s ease;"></div>
+    <div id="progressBar" class="progress-bar-top" style="transition: width 1s ease"></div>
 
     <!-- Breed Selection -->
     <h2 class="w-100 text-center mt-5">Select a Breed</h2>
-    <select id="breedSelect" style="width: 300px;" class="form-select form-select-lg my-1 mx-auto" aria-label="form-select-lg">
-    </select>
+    <select id="breedSelect" style="width: 300px" class="form-select form-select-lg my-1 mx-auto" aria-label="form-select-lg"></select>
     <div class="d-flex">
       <button id="getFavouritesBtn" class="btn btn-success mx-auto mb-5">
         Get Favorites
@@ -49,7 +47,7 @@
     </div>
 
     <!-- Information Section -->
-    <div id="infoDump" class="px-5 py-3 mx-auto" style="max-width: 1600px;"></div>
+    <div id="infoDump" class="px-5 py-3 mx-auto" style="max-width: 1600px"></div>
 
     <!-- Carousel Item Template -->
     <template id="carouselItemTemplate">

@@ -1,5 +1,4 @@
 import * as Carousel from "./Carousel.js";
-import axios from "axios";
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -11,7 +10,8 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
-const API_KEY = "";
+const API_KEY =
+  "live_Imyw4CIT0VCXUH4hf2TbcvyrbWms8zrJqaToC7BMpyzMQkOzJsWP2wXVzeek49JZ";
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -22,6 +22,18 @@ const API_KEY = "";
  * This function should execute immediately.
  */
 
+const initialLoad = async () => {
+  const response = await fetch("https://api.thecatapi.com/v1/breeds");
+  const data = await response.json();
+  console.log(data);
+  data.forEach((catBreed) => {
+    const option = document.createElement("option");
+    option.value = catBreed.id;
+    option.textContent = catBreed.name;
+    breedSelect.appendChild(option);
+  });
+};
+initialLoad();
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
