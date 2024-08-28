@@ -1,4 +1,5 @@
 import * as Carousel from "./Carousel.js";
+// require("dotenv").config();
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -10,8 +11,8 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
-const API_KEY =
-  "live_Imyw4CIT0VCXUH4hf2TbcvyrbWms8zrJqaToC7BMpyzMQkOzJsWP2wXVzeek49JZ";
+const API_KEY = process.env.API_KEY;
+console.log(API_KEY);
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -25,7 +26,7 @@ const API_KEY =
 const initialLoad = async () => {
   const response = await fetch("https://api.thecatapi.com/v1/breeds");
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   data.forEach((catBreed) => {
     const option = document.createElement("option");
     option.value = catBreed.id;
@@ -48,6 +49,38 @@ initialLoad();
  * - Each new selection should clear, re-populate, and restart the Carousel.
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
+// console.log(breedSelect.value);
+breedSelect.addEventListener("change", async () => {
+  try {
+    Carousel.clear();
+
+    //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
+    const response = await fetch(
+      `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${breedSelect.value}&api_key=${API_KEY}`
+    );
+    const data = await response.json();
+    console.log(data);
+    data.forEach((cat) => {
+      const carouselItem = Carousel.createCarouselItem(
+        cat.url,
+        cat.breeds[0].name,
+        cat.id
+      );
+      Carousel.appendCarousel(carouselItem);
+    });
+    let [cat] = data;
+    let [catInfo] = cat.breeds;
+
+    infoDump.innerHTML = `
+      <h2>${catInfo.name}</h2>
+      <p>${catInfo.description}</p>
+      <p>Temperament: ${catInfo.temperament}</p>`;
+    console.log(catInfo);
+    Carousel.start();
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
