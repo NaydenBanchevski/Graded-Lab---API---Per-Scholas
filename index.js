@@ -53,6 +53,8 @@ initialLoad();
 breedSelect.addEventListener("change", async () => {
   try {
     Carousel.clear();
+    progressBar.style.opacity = "0";
+    progressBar.style.width = "0%";
 
     //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
     const response = await fetch(
@@ -76,6 +78,8 @@ breedSelect.addEventListener("change", async () => {
       <p>${catInfo.description}</p>
       <p>Temperament: ${catInfo.temperament}</p>`;
     console.log(catInfo);
+    progressBar.style.opacity = "1";
+    progressBar.style.width = "100%";
     Carousel.start();
   } catch (error) {
     console.log(error.message);
@@ -133,8 +137,57 @@ breedSelect.addEventListener("change", async () => {
  *   you delete that favourite using the API, giving this function "toggle" functionality.
  * - You can call this function by clicking on the heart at the top right of any image.
  */
+
 export async function favourite(imgId) {
-  // your code here
+  const favoriteUrl = "https://api.thecatapi.com/v1/favourites";
+  try {
+    const favouritesResponse = await axios.get(favoriteUrl, {
+      headers: {
+        "x-api-key": API_KEY,
+      },
+    });
+    const favourBreeds = favouritesResponse.data;
+
+    const existingFavourite = favourBreeds.find(
+      (breed) => breed.image_id === imgId
+    );
+
+    if (existingFavourite) {
+      await axios.delete(`${favoriteUrl}/${existingFavourite.id}`, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+      });
+      console.log(`Favourite with ID ${existingFavourite.id} deleted.`);
+    } else {
+      const response = await axios.post(
+        favoriteUrl,
+        { image_id: imgId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY,
+          },
+        }
+      );
+      console.log("Favourite added:", response.data);
+    }
+  } catch (error) {
+    console.error("Error toggling favourite:", error);
+  }
+}
+
+export async function getFavourites() {
+  try {
+    const response = await axios.get(
+      `https://api.thecatapi.com/v1/favourites`,
+      { headers: { "x-api-key": API_KEY } }
+    );
+    console.log("Favourites retrieved:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error retrieving favourites:", error);
+  }
 }
 
 /**
@@ -154,3 +207,21 @@ export async function favourite(imgId) {
  * - Test other breeds as well. Not every breed has the same data available, so
  *   your code should account for this.
  */
+
+getFavouritesBtn.addEventListener("click", async () => {
+  try {
+    Carousel.clear();
+    const favouritesBreed = await getFavourites();
+    favouritesBreed.forEach((fav) => {
+      const carouselItem = Carousel.createCarouselItem(
+        fav.image.url,
+        fav.image_id
+      );
+      Carousel.appendCarousel(carouselItem);
+    });
+    infoDump.innerHTML = "";
+    Carousel.start();
+  } catch (error) {
+    console.error("Error displaying favourites:", error);
+  }
+});

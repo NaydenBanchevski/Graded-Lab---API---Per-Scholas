@@ -6985,6 +6985,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.favourite = favourite;
+exports.getFavourites = getFavourites;
 var Carousel = _interopRequireWildcard(require("./Carousel.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -7076,15 +7077,17 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
       case 0:
         _context2.prev = 0;
         Carousel.clear();
+        progressBar.style.opacity = "0";
+        progressBar.style.width = "0%";
 
         //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
-        _context2.next = 4;
+        _context2.next = 6;
         return fetch("https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=".concat(breedSelect.value, "&api_key=").concat(API_KEY));
-      case 4:
+      case 6:
         response = _context2.sent;
-        _context2.next = 7;
+        _context2.next = 9;
         return response.json();
-      case 7:
+      case 9:
         data = _context2.sent;
         console.log(data);
         data.forEach(function (cat) {
@@ -7095,18 +7098,20 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
         _cat$breeds = _slicedToArray(cat.breeds, 1), catInfo = _cat$breeds[0];
         infoDump.innerHTML = "\n      <h2>".concat(catInfo.name, "</h2>\n      <p>").concat(catInfo.description, "</p>\n      <p>Temperament: ").concat(catInfo.temperament, "</p>");
         console.log(catInfo);
+        progressBar.style.opacity = "1";
+        progressBar.style.width = "100%";
         Carousel.start();
-        _context2.next = 20;
+        _context2.next = 24;
         break;
-      case 17:
-        _context2.prev = 17;
+      case 21:
+        _context2.prev = 21;
         _context2.t0 = _context2["catch"](0);
         console.log(_context2.t0.message);
-      case 20:
+      case 24:
       case "end":
         return _context2.stop();
     }
-  }, _callee2, null, [[0, 17]]);
+  }, _callee2, null, [[0, 21]]);
 })));
 
 /**
@@ -7163,6 +7168,71 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
 function favourite(_x) {
   return _favourite.apply(this, arguments);
 }
+function _favourite() {
+  _favourite = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(imgId) {
+    var favoriteUrl, favouritesResponse, favourBreeds, existingFavourite, response;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          favoriteUrl = "https://api.thecatapi.com/v1/favourites";
+          _context4.prev = 1;
+          _context4.next = 4;
+          return axios.get(favoriteUrl, {
+            headers: {
+              "x-api-key": API_KEY
+            }
+          });
+        case 4:
+          favouritesResponse = _context4.sent;
+          favourBreeds = favouritesResponse.data;
+          existingFavourite = favourBreeds.find(function (breed) {
+            return breed.image_id === imgId;
+          });
+          if (!existingFavourite) {
+            _context4.next = 13;
+            break;
+          }
+          _context4.next = 10;
+          return axios.delete("".concat(favoriteUrl, "/").concat(existingFavourite.id), {
+            headers: {
+              "x-api-key": API_KEY
+            }
+          });
+        case 10:
+          console.log("Favourite with ID ".concat(existingFavourite.id, " deleted."));
+          _context4.next = 17;
+          break;
+        case 13:
+          _context4.next = 15;
+          return axios.post(favoriteUrl, {
+            image_id: imgId
+          }, {
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": API_KEY
+            }
+          });
+        case 15:
+          response = _context4.sent;
+          console.log("Favourite added:", response.data);
+        case 17:
+          _context4.next = 22;
+          break;
+        case 19:
+          _context4.prev = 19;
+          _context4.t0 = _context4["catch"](1);
+          console.error("Error toggling favourite:", _context4.t0);
+        case 22:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[1, 19]]);
+  }));
+  return _favourite.apply(this, arguments);
+}
+function getFavourites() {
+  return _getFavourites.apply(this, arguments);
+}
 /**
  * 9. Test your favourite() function by creating a getFavourites() function.
  * - Use Axios to get all of your favourites from the cat API.
@@ -7179,18 +7249,64 @@ function favourite(_x) {
  * - Test other breeds as well. Not every breed has the same data available, so
  *   your code should account for this.
  */
-function _favourite() {
-  _favourite = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(imgId) {
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
+function _getFavourites() {
+  _getFavourites = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var response;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
         case 0:
+          _context5.prev = 0;
+          _context5.next = 3;
+          return axios.get("https://api.thecatapi.com/v1/favourites", {
+            headers: {
+              "x-api-key": API_KEY
+            }
+          });
+        case 3:
+          response = _context5.sent;
+          console.log("Favourites retrieved:", response.data);
+          return _context5.abrupt("return", response.data);
+        case 8:
+          _context5.prev = 8;
+          _context5.t0 = _context5["catch"](0);
+          console.error("Error retrieving favourites:", _context5.t0);
+        case 11:
         case "end":
-          return _context3.stop();
+          return _context5.stop();
       }
-    }, _callee3);
+    }, _callee5, null, [[0, 8]]);
   }));
-  return _favourite.apply(this, arguments);
+  return _getFavourites.apply(this, arguments);
 }
+getFavouritesBtn.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var favouritesBreed;
+  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+    while (1) switch (_context3.prev = _context3.next) {
+      case 0:
+        _context3.prev = 0;
+        Carousel.clear();
+        _context3.next = 4;
+        return getFavourites();
+      case 4:
+        favouritesBreed = _context3.sent;
+        favouritesBreed.forEach(function (fav) {
+          var carouselItem = Carousel.createCarouselItem(fav.image.url, fav.image_id);
+          Carousel.appendCarousel(carouselItem);
+        });
+        infoDump.innerHTML = "";
+        Carousel.start();
+        _context3.next = 13;
+        break;
+      case 10:
+        _context3.prev = 10;
+        _context3.t0 = _context3["catch"](0);
+        console.error("Error displaying favourites:", _context3.t0);
+      case 13:
+      case "end":
+        return _context3.stop();
+    }
+  }, _callee3, null, [[0, 10]]);
+})));
 },{"./Carousel.js":"Carousel.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -7216,7 +7332,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52254" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49849" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
