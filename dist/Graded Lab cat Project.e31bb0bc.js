@@ -7013,7 +7013,7 @@ var getFavouritesBtn = document.getElementById("getFavouritesBtn");
 // Step 0: Store your API key here for reference and easy access.
 var API_KEY = "live_Imyw4CIT0VCXUH4hf2TbcvyrbWms8zrJqaToC7BMpyzMQkOzJsWP2wXVzeek49JZ";
 console.log(API_KEY);
-
+var heart = document.querySelector(".favourite-button");
 /**
  * 1. Create an async function "initialLoad" that does the following:
  * - Retrieve a list of breeds from the cat API using fetch().
@@ -7023,32 +7023,50 @@ console.log(API_KEY);
  * This function should execute immediately.
  */
 
+// const initialLoad = async () => {
+//   const response = await fetch("https://api.thecatapi.com/v1/breeds");
+//   const data = await response.json();
+//   // console.log(data);
+//   data.forEach((catBreed) => {
+//     const option = document.createElement("option");
+//     option.value = catBreed.id;
+//     option.textContent = catBreed.name;
+//     breedSelect.appendChild(option);
+//   });
+// };
+// initialLoad();
+
+// axios variant
+
 var initialLoad = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var response, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
-          return fetch("https://api.thecatapi.com/v1/breeds");
-        case 2:
+          _context.prev = 0;
+          _context.next = 3;
+          return axios.get("https://api.thecatapi.com/v1/breeds");
+        case 3:
           response = _context.sent;
-          _context.next = 5;
-          return response.json();
-        case 5:
-          data = _context.sent;
-          // console.log(data);
+          data = response.data; // console.log(data);
           data.forEach(function (catBreed) {
             var option = document.createElement("option");
             option.value = catBreed.id;
             option.textContent = catBreed.name;
             breedSelect.appendChild(option);
           });
-        case 7:
+          _context.next = 11;
+          break;
+        case 8:
+          _context.prev = 8;
+          _context.t0 = _context["catch"](0);
+          console.error("Error fetching breeds:", _context.t0);
+        case 11:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[0, 8]]);
   }));
   return function initialLoad() {
     return _ref.apply(this, arguments);
@@ -7070,6 +7088,43 @@ initialLoad();
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
 // console.log(breedSelect.value);
+// breedSelect.addEventListener("change", async () => {
+//   try {
+//     Carousel.clear();
+//     progressBar.style.opacity = "0";
+//     progressBar.style.width = "0%";
+
+//     //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
+//     const response = await fetch(
+//       `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${breedSelect.value}&api_key=${API_KEY}`
+//     );
+//     const data = await response.json();
+//     console.log(data);
+//     data.forEach((cat) => {
+//       const carouselItem = Carousel.createCarouselItem(
+//         cat.url,
+//         cat.breeds[0].name,
+//         cat.id
+//       );
+//       Carousel.appendCarousel(carouselItem);
+//     });
+//     let [cat] = data;
+//     let [catInfo] = cat.breeds;
+
+//     infoDump.innerHTML = `
+//       <h2>${catInfo.name}</h2>
+//       <p>${catInfo.description}</p>
+//       <p>Temperament: ${catInfo.temperament}</p>`;
+//     console.log(catInfo);
+//     progressBar.style.opacity = "1";
+//     progressBar.style.width = "100%";
+//     Carousel.start();
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// });
+
+// axios variant
 breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
   var response, data, _data, cat, _cat$breeds, catInfo;
   return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -7080,15 +7135,13 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
         progressBar.style.opacity = "0";
         progressBar.style.width = "0%";
 
-        //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
+        // Copy this link, add your own API Key to get 10 bengal images
+        // https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
         _context2.next = 6;
-        return fetch("https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=".concat(breedSelect.value, "&api_key=").concat(API_KEY));
+        return axios.get("https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=".concat(breedSelect.value, "&api_key=").concat(API_KEY));
       case 6:
         response = _context2.sent;
-        _context2.next = 9;
-        return response.json();
-      case 9:
-        data = _context2.sent;
+        data = response.data;
         console.log(data);
         data.forEach(function (cat) {
           var carouselItem = Carousel.createCarouselItem(cat.url, cat.breeds[0].name, cat.id);
@@ -7101,17 +7154,17 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
         progressBar.style.opacity = "1";
         progressBar.style.width = "100%";
         Carousel.start();
-        _context2.next = 24;
+        _context2.next = 22;
         break;
-      case 21:
-        _context2.prev = 21;
+      case 19:
+        _context2.prev = 19;
         _context2.t0 = _context2["catch"](0);
         console.log(_context2.t0.message);
-      case 24:
+      case 22:
       case "end":
         return _context2.stop();
     }
-  }, _callee2, null, [[0, 21]]);
+  }, _callee2, null, [[0, 19]]);
 })));
 
 /**
@@ -7170,7 +7223,7 @@ function favourite(_x) {
 }
 function _favourite() {
   _favourite = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(imgId) {
-    var favoriteUrl, favouritesResponse, favourBreeds, existingFavourite, response;
+    var favoriteUrl, favouritesResponse, favourites, existingFavourite, response;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
@@ -7184,9 +7237,9 @@ function _favourite() {
           });
         case 4:
           favouritesResponse = _context4.sent;
-          favourBreeds = favouritesResponse.data;
-          existingFavourite = favourBreeds.find(function (breed) {
-            return breed.image_id === imgId;
+          favourites = favouritesResponse.data;
+          existingFavourite = favourites.find(function (fav) {
+            return fav.image_id === imgId;
           });
           if (!existingFavourite) {
             _context4.next = 13;
@@ -7214,14 +7267,14 @@ function _favourite() {
           });
         case 15:
           response = _context4.sent;
-          console.log("Favourite added:", response.data);
+          console.log("img added", response.data);
         case 17:
           _context4.next = 22;
           break;
         case 19:
           _context4.prev = 19;
           _context4.t0 = _context4["catch"](1);
-          console.error("Error toggling favourite:", _context4.t0);
+          console.error("Error toggle img:", _context4.t0);
         case 22:
         case "end":
           return _context4.stop();
@@ -7279,7 +7332,7 @@ function _getFavourites() {
   return _getFavourites.apply(this, arguments);
 }
 getFavouritesBtn.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-  var favouritesBreed;
+  var favourites;
   return _regeneratorRuntime().wrap(function _callee3$(_context3) {
     while (1) switch (_context3.prev = _context3.next) {
       case 0:
@@ -7288,13 +7341,13 @@ getFavouritesBtn.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__
         _context3.next = 4;
         return getFavourites();
       case 4:
-        favouritesBreed = _context3.sent;
-        favouritesBreed.forEach(function (fav) {
-          var carouselItem = Carousel.createCarouselItem(fav.image.url, fav.image_id);
+        favourites = _context3.sent;
+        favourites.forEach(function (fav) {
+          var carouselItem = Carousel.createCarouselItem(fav.image.url, "", fav.image_id);
           Carousel.appendCarousel(carouselItem);
         });
-        infoDump.innerHTML = "";
         Carousel.start();
+        infoDump.innerHTML = "";
         _context3.next = 13;
         break;
       case 10:
@@ -7332,7 +7385,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49849" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62475" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

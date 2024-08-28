@@ -13,7 +13,7 @@ const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 // Step 0: Store your API key here for reference and easy access.
 const API_KEY = process.env.API_KEY;
 console.log(API_KEY);
-
+const heart = document.querySelector(".favourite-button");
 /**
  * 1. Create an async function "initialLoad" that does the following:
  * - Retrieve a list of breeds from the cat API using fetch().
@@ -23,17 +23,37 @@ console.log(API_KEY);
  * This function should execute immediately.
  */
 
+// const initialLoad = async () => {
+//   const response = await fetch("https://api.thecatapi.com/v1/breeds");
+//   const data = await response.json();
+//   // console.log(data);
+//   data.forEach((catBreed) => {
+//     const option = document.createElement("option");
+//     option.value = catBreed.id;
+//     option.textContent = catBreed.name;
+//     breedSelect.appendChild(option);
+//   });
+// };
+// initialLoad();
+
+// axios variant
+
 const initialLoad = async () => {
-  const response = await fetch("https://api.thecatapi.com/v1/breeds");
-  const data = await response.json();
-  // console.log(data);
-  data.forEach((catBreed) => {
-    const option = document.createElement("option");
-    option.value = catBreed.id;
-    option.textContent = catBreed.name;
-    breedSelect.appendChild(option);
-  });
+  try {
+    const response = await axios.get("https://api.thecatapi.com/v1/breeds");
+    const data = response.data;
+    // console.log(data);
+    data.forEach((catBreed) => {
+      const option = document.createElement("option");
+      option.value = catBreed.id;
+      option.textContent = catBreed.name;
+      breedSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error fetching breeds:", error);
+  }
 };
+
 initialLoad();
 /**
  * 2. Create an event handler for breedSelect that does the following:
@@ -50,17 +70,55 @@ initialLoad();
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
 // console.log(breedSelect.value);
+// breedSelect.addEventListener("change", async () => {
+//   try {
+//     Carousel.clear();
+//     progressBar.style.opacity = "0";
+//     progressBar.style.width = "0%";
+
+//     //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
+//     const response = await fetch(
+//       `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${breedSelect.value}&api_key=${API_KEY}`
+//     );
+//     const data = await response.json();
+//     console.log(data);
+//     data.forEach((cat) => {
+//       const carouselItem = Carousel.createCarouselItem(
+//         cat.url,
+//         cat.breeds[0].name,
+//         cat.id
+//       );
+//       Carousel.appendCarousel(carouselItem);
+//     });
+//     let [cat] = data;
+//     let [catInfo] = cat.breeds;
+
+//     infoDump.innerHTML = `
+//       <h2>${catInfo.name}</h2>
+//       <p>${catInfo.description}</p>
+//       <p>Temperament: ${catInfo.temperament}</p>`;
+//     console.log(catInfo);
+//     progressBar.style.opacity = "1";
+//     progressBar.style.width = "100%";
+//     Carousel.start();
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// });
+
+// axios variant
 breedSelect.addEventListener("change", async () => {
   try {
     Carousel.clear();
     progressBar.style.opacity = "0";
     progressBar.style.width = "0%";
 
-    //Copy this link, add your own API Key to get 10 bengal images https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
-    const response = await fetch(
+    // Copy this link, add your own API Key to get 10 bengal images
+    // https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&REPLACE_ME//API_KEY
+    const response = await axios.get(
       `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${breedSelect.value}&api_key=${API_KEY}`
     );
-    const data = await response.json();
+    const data = response.data;
     console.log(data);
     data.forEach((cat) => {
       const carouselItem = Carousel.createCarouselItem(
@@ -140,17 +198,16 @@ breedSelect.addEventListener("change", async () => {
 
 export async function favourite(imgId) {
   const favoriteUrl = "https://api.thecatapi.com/v1/favourites";
+
   try {
     const favouritesResponse = await axios.get(favoriteUrl, {
       headers: {
         "x-api-key": API_KEY,
       },
     });
-    const favourBreeds = favouritesResponse.data;
+    const favourites = favouritesResponse.data;
 
-    const existingFavourite = favourBreeds.find(
-      (breed) => breed.image_id === imgId
-    );
+    const existingFavourite = favourites.find((fav) => fav.image_id === imgId);
 
     if (existingFavourite) {
       await axios.delete(`${favoriteUrl}/${existingFavourite.id}`, {
@@ -170,10 +227,10 @@ export async function favourite(imgId) {
           },
         }
       );
-      console.log("Favourite added:", response.data);
+      console.log("img added", response.data);
     }
   } catch (error) {
-    console.error("Error toggling favourite:", error);
+    console.error("Error toggle img:", error);
   }
 }
 
@@ -211,16 +268,17 @@ export async function getFavourites() {
 getFavouritesBtn.addEventListener("click", async () => {
   try {
     Carousel.clear();
-    const favouritesBreed = await getFavourites();
-    favouritesBreed.forEach((fav) => {
+    const favourites = await getFavourites();
+    favourites.forEach((fav) => {
       const carouselItem = Carousel.createCarouselItem(
         fav.image.url,
+        "",
         fav.image_id
       );
       Carousel.appendCarousel(carouselItem);
     });
-    infoDump.innerHTML = "";
     Carousel.start();
+    infoDump.innerHTML = ``;
   } catch (error) {
     console.error("Error displaying favourites:", error);
   }
