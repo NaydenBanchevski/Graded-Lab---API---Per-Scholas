@@ -28,9 +28,9 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 250px; /* Adjust the width as needed */
+  width: 250px;
   z-index: 1;
-  pointer-events: none; /* Ensure the pseudo-elements don't interfere with interactions */
+  pointer-events: none;
 }
 
 #carouselExampleControls::before {
@@ -144,8 +144,8 @@ body {
   background-color: white;
   color: #fc9496;
   border-radius: 10px;
-  outline: none; /* Remove the default outline */
-  border: 2px solid #fc949654; /* Add a custom border */
+  outline: none;
+  border: 2px solid #fc949654;
   border-radius: 10px;
   padding: 10px;
   transition: border-color 0.3s ease;
