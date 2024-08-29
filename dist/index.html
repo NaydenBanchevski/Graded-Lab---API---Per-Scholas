@@ -22,27 +22,32 @@
 
   <body>
     <!-- Progress Bar-->
+
     <div id="progressBar" class="progress-bar-top" style="transition: width 1s ease"></div>
 
+    <div class="hero-container">
+      <h1>Interesting facts about Cats</h1>
+      <div class="img-container">
+        <img src="/cat.85e4d485.png" alt="cat">
+      </div>
+    </div>
+
     <!-- Breed Selection -->
-    <h2 class="w-100 text-center mt-5">Select a Breed</h2>
-    <select id="breedSelect" style="width: 300px" class="form-select form-select-lg my-1 mx-auto" aria-label="form-select-lg">
+    <select id="breedSelect" class="select-menu" aria-label="form-select-lg">
       <option value="0">Select a Breed</option>
     </select>
     <div class="d-flex">
-      <button id="getFavouritesBtn" class="btn btn-success mx-auto mb-5">
-        Get Favorites
-      </button>
+      <button id="getFavouritesBtn" class="get-result">Get Favorites</button>
     </div>
 
     <!-- Carousel -->
     <div id="carouselExampleControls" class="carousel" data-bs-ride="carousel">
       <div id="carouselInner" class="carousel-inner"></div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <button class="carousel-control-prev" type="button" id="control" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <button id="control" class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -52,6 +57,7 @@
     <div id="infoDump" class="px-5 py-3 mx-auto" style="max-width: 1600px"></div>
 
     <!-- Carousel Item Template -->
+
     <template id="carouselItemTemplate">
       <div class="carousel-item">
         <div class="card">
@@ -67,6 +73,7 @@
         </div>
       </div>
     </template>
+
     <!-- Carousel Item Template -->
   </body>
 </html>

@@ -6952,29 +6952,30 @@ function start() {
     var carousel = new bootstrap.Carousel(multipleCardCarousel, {
       interval: false
     });
-    var carouselWidth = $(".carousel-inner")[0].scrollWidth;
-    var cardWidth = $(".carousel-item").width();
+    var carouselInner = document.querySelector(".carousel-inner");
+    var carouselItems = document.querySelectorAll(".carousel-item");
+    var cardWidth = carouselItems[0].offsetWidth;
     var scrollPosition = 0;
-    $("#carouselExampleControls .carousel-control-next").unbind();
-    $("#carouselExampleControls .carousel-control-next").on("click", function () {
-      if (scrollPosition < carouselWidth - cardWidth * 4) {
+    document.querySelector("#carouselExampleControls .carousel-control-next").addEventListener("click", function () {
+      if (scrollPosition < carouselInner.scrollWidth - cardWidth) {
         scrollPosition += cardWidth;
-        $("#carouselExampleControls .carousel-inner").animate({
-          scrollLeft: scrollPosition
-        }, 600);
+        carouselInner.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth"
+        });
       }
     });
-    $("#carouselExampleControls .carousel-control-prev").unbind();
-    $("#carouselExampleControls .carousel-control-prev").on("click", function () {
+    document.querySelector("#carouselExampleControls .carousel-control-prev").addEventListener("click", function () {
       if (scrollPosition > 0) {
         scrollPosition -= cardWidth;
-        $("#carouselExampleControls .carousel-inner").animate({
-          scrollLeft: scrollPosition
-        }, 600);
+        carouselInner.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth"
+        });
       }
     });
   } else {
-    $(multipleCardCarousel).addClass("slide");
+    multipleCardCarousel.classList.add("slide");
   }
 }
 },{"bootstrap":"node_modules/bootstrap/dist/js/bootstrap.esm.js","./index.js":"index.js"}],"index.js":[function(require,module,exports) {
@@ -7153,18 +7154,19 @@ breedSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE
         console.log(catInfo);
         progressBar.style.opacity = "1";
         progressBar.style.width = "100%";
+        document.getElementById("carouselExampleControls").style.display = "flex";
         Carousel.start();
-        _context2.next = 22;
+        _context2.next = 23;
         break;
-      case 19:
-        _context2.prev = 19;
+      case 20:
+        _context2.prev = 20;
         _context2.t0 = _context2["catch"](0);
         console.log(_context2.t0.message);
-      case 22:
+      case 23:
       case "end":
         return _context2.stop();
     }
-  }, _callee2, null, [[0, 19]]);
+  }, _callee2, null, [[0, 20]]);
 })));
 
 /**
@@ -7385,7 +7387,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62475" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64764" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

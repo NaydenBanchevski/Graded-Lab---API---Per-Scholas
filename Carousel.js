@@ -41,36 +41,30 @@ export function start() {
     const carousel = new bootstrap.Carousel(multipleCardCarousel, {
       interval: false,
     });
-    const carouselWidth = $(".carousel-inner")[0].scrollWidth;
-    const cardWidth = $(".carousel-item").width();
+
+    const carouselInner = document.querySelector(".carousel-inner");
+    const carouselItems = document.querySelectorAll(".carousel-item");
+    const cardWidth = carouselItems[0].offsetWidth;
     let scrollPosition = 0;
-    $("#carouselExampleControls .carousel-control-next").unbind();
-    $("#carouselExampleControls .carousel-control-next").on(
-      "click",
-      function () {
-        if (scrollPosition < carouselWidth - cardWidth * 4) {
+
+    document
+      .querySelector("#carouselExampleControls .carousel-control-next")
+      .addEventListener("click", () => {
+        if (scrollPosition < carouselInner.scrollWidth - cardWidth) {
           scrollPosition += cardWidth;
-          $("#carouselExampleControls .carousel-inner").animate(
-            { scrollLeft: scrollPosition },
-            600
-          );
+          carouselInner.scrollTo({ left: scrollPosition, behavior: "smooth" });
         }
-      }
-    );
-    $("#carouselExampleControls .carousel-control-prev").unbind();
-    $("#carouselExampleControls .carousel-control-prev").on(
-      "click",
-      function () {
+      });
+
+    document
+      .querySelector("#carouselExampleControls .carousel-control-prev")
+      .addEventListener("click", () => {
         if (scrollPosition > 0) {
           scrollPosition -= cardWidth;
-          $("#carouselExampleControls .carousel-inner").animate(
-            { scrollLeft: scrollPosition },
-            600
-          );
+          carouselInner.scrollTo({ left: scrollPosition, behavior: "smooth" });
         }
-      }
-    );
+      });
   } else {
-    $(multipleCardCarousel).addClass("slide");
+    multipleCardCarousel.classList.add("slide");
   }
 }

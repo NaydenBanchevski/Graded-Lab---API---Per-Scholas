@@ -4,7 +4,108 @@ body {
 }
 
 body {
-  background-color: lightgray;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#control {
+  cursor: pointer;
+  z-index: 2;
+  background-color: #fc9496;
+}
+
+#carouselExampleControls {
+  position: relative;
+  width: 80%;
+}
+
+#carouselExampleControls::before,
+#carouselExampleControls::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 250px; /* Adjust the width as needed */
+  z-index: 1;
+  pointer-events: none; /* Ensure the pseudo-elements don't interfere with interactions */
+}
+
+#carouselExampleControls::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+#carouselExampleControls::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: #fc949679;
+  padding: 5px;
+  margin: 50px;
+}
+.img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px;
+  width: 100%;
+}
+.img-wrapper img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 5px solid white;
+}
+
+.hero-container {
+  background-color: #fc9496;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.hero-container h1 {
+  font-size: 5em;
+  color: white;
+  margin-top: 50px;
+}
+
+.img-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  width: 350px;
+}
+.carousel-item {
+  max-width: 500px;
+}
+
+.carousel {
+  max-width: 100%;
 }
 
 .progress-bar-top {
@@ -12,28 +113,73 @@ body {
   top: 0;
   left: 0;
   width: 0%;
-  height: 15px;
-  background-color: green;
-  border-bottom: 1px solid black;
+  height: 5px;
+  background-color: white;
 }
 
 .favourite-button {
+  margin: 10px;
   position: absolute;
   top: 10px;
   right: 15px;
   z-index: 99999;
   width: 30px;
   height: 30px;
-  color: lightpink;
+  color: rgb(255, 198, 206);
   cursor: pointer;
   transition: all ease 0.2s;
 }
 .favourite-button:hover {
-  color: red;
+  color: #fc9496;
   width: 36px;
   height: 36px;
   top: 7px;
   right: 12px;
+}
+
+.select-menu {
+  width: 350px;
+  outline: none;
+  border: 1px solid #fc9496;
+  background-color: white;
+  color: #fc9496;
+  border-radius: 10px;
+  outline: none; /* Remove the default outline */
+  border: 2px solid #fc949654; /* Add a custom border */
+  border-radius: 10px;
+  padding: 10px;
+  transition: border-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.select-menu:focus {
+  border-color: #fc949675;
+  box-shadow: 0 0 5px #fc94967a;
+}
+
+.get-result {
+  border: none;
+  color: white;
+  background-color: #fc9496;
+  margin: 20px;
+  width: 350px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+#carouselExampleControls {
+  display: none;
+}
+
+#infoDump {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px;
+  width: 80%;
+  background-color: #fc9496;
+  border-radius: 10px;
+  color: white;
 }
 
 .carousel-inner {

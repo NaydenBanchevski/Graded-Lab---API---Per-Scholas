@@ -138,6 +138,7 @@ breedSelect.addEventListener("change", async () => {
     console.log(catInfo);
     progressBar.style.opacity = "1";
     progressBar.style.width = "100%";
+    document.getElementById("carouselExampleControls").style.display = "flex";
     Carousel.start();
   } catch (error) {
     console.log(error.message);
